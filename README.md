@@ -2,20 +2,20 @@
 
 Copernicus Data-access and Expoitation platform for Germany (CODE-DE) - user tools
 
-# Description
+## Description
 
 This tools package publishes several scripts, examples and utilities to automate queries and data retrieval from the CODE-DE offerings.
 
 The CODE-DE Platform provides standardized interfaces for dataset discovery, Earth-Observation product filtered searches and download.
 
-# Contents
+## Contents
 
 The scripts are located in the `bin/` subdirectory. The script header contains instructions on how to use. For convenience the usage help is listed below.
 
-## code-de-query-download.sh 
+### code-de-query-download.sh 
 
 Performs an OpenSearch query and downloads the found products.
-
+```
   USAGE:
 
   ./code-de-query-download.sh -c|--condition=... [-b|--baseurl=https://code-de.org] [-l|--limit=50] [-p|--parallel=1]
@@ -24,20 +24,25 @@ Performs an OpenSearch query and downloads the found products.
     --baseurl of the CODE-DE services (default is https://code-de.org)
     --limit the amount of products to be retrieved (default=50, max=500)
     --parallel count of retrievals, WARNING: do not overload your system and network (the server might limit you to 2 or 4 parallel downloads)
+```
+Output products are placed in the current directory.
 
-  Output products are placed in the current directory.
-
-## dataHubTransfer.sh 
+### dataHubTransfer.sh 
 
 This script will search and incrementally download new products from a DHuS.
 
 The script is intended to be run in a cron job, e.g.:
+```
   10 * * * * /path-to-cronjob/dataHubTransfer.sh /path/to/workdir &>> /path/to/workdir/log/dataHubTransfer_$(date +\%Y\%m\%d).log
+```
 
 The path to a writable working directory must contain a file:
+```
   dataHubTransfer.properties
+```
 
 containing the properties:
+```
   dhusUrl="https://code-de.org/dhus"
   WGETRC=/path/to/.wgetrc (file with user=xxx and password=yyy)
   basefilter="platformname:Sentinel-2 AND footprint:\"Intersects(POLYGON((5.9 47.2,15.2 47.2,15.2 55.1,5.9 55.1,5.9 47.2)))\""
@@ -46,5 +51,15 @@ containing the properties:
   batchSize=100
   #MAXCACHESIZE=$((9 * 1000000)) ## in kbytes
   #transferAction=/path/to/some/command/to/run/after/file/transfer
+```
+Note: properties above prefixed with `#` are optional.
+
+## Installation
+
+Place the script package `bin/` contents somewhere on your PATH. The scripts require bash, 
+wget, curl and a few common shell utilities.
 
 
+## License
+
+See the LICENSE.txt file.
