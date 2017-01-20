@@ -57,7 +57,7 @@ echo $urls | xargs -n1 -P4 curl -O
 :bulb: the above command can be assembled to run as a bash one-liner.
 
 :warning: Note: the current CODE-DE Download Service does not use authentication. In the near future, 
-the curl download will need the access account information passed with the -u ```<user>:<password>``` parameter.
+the curl download will need the access account information passed with the ```-u <user>:<password>``` parameter.
 
 
 ## Download a whole directory
