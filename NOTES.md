@@ -79,3 +79,4 @@ provides the means to incrementally download new products from a DHuS (ESA Data 
 mirror providing access to Sentinel prodcuts. The script is intended to be run in a cron job. 
 Instructions are included in the README.md and in the script header itself.
 
+:warning: Note: To use this interface you need to separately sign-up for an account: https://code-de.org/dhus/#/self-registration
