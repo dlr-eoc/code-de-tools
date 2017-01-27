@@ -13,7 +13,7 @@
 #   dataHubTransfer.properties
 # containing the properties:
 #   dhusUrl="https://code-de.org/dhus"
-#   WGETRC=/path/to/.wgetrc (file with user=xxx and password=yyy)
+#   WGETRC=/path/to/.wgetrc (file with user=xxx and password=yyy of the account at the DHuS service)
 #   basefilter="platformname:Sentinel-2 AND footprint:\"Intersects(POLYGON((5.9 47.2,15.2 47.2,15.2 55.1,5.9 55.1,5.9 47.2)))\""
 #   outputPath=/tmp
 #   lastIngestionDate=NOW-1DAY
