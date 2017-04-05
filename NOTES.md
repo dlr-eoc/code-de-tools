@@ -12,14 +12,14 @@ The simplest way of finding data products in CODE-DE is using OpenSearch queries
 The following example demonstrates an OpenSearch URL with a time specification of one day and an 
 area of interest (AOI) over Germany, OpenSearch URL example:
 
-  https://code-de.org/opensearch/request/?httpAccept=application/atom%2Bxml&parentIdentifier=EOP:CODE-DE:S2_MSI_L1C&startDate=2017-01-04T00:00:00.000Z&endDate=2017-01-04T23:59:59.999Z&bbox=5.9,47.2,15.2,55
+  https://catalog.code-de.org/opensearch/request/?httpAccept=application/atom%2Bxml&parentIdentifier=EOP:CODE-DE:S2_MSI_L1C&startDate=2017-01-04T00:00:00.000Z&endDate=2017-01-04T23:59:59.999Z&bbox=5.9,47.2,15.2,55
 
 Paging can be achieved by adding the parameters ```&startPage=1``` or ```&startRecord=1``` to the URL 
 and you can specify the page size with ```&maximumRecords=100``` :warning: the default is 50 and the maximum is 500). 
 The full OpenSearch description document with the search templates and parameters can be retrieved with 
 the URL 
 
-  https://code-de.org/opensearch/description.xml?parentIdentifier=EOP:CODE-DE:S2_MSI_L1C]
+  https://catalog.code-de.org/opensearch/description.xml?parentIdentifier=EOP:CODE-DE:S2_MSI_L1C]
 
 for example to locate the ```&cloudCover=[0,20]``` parameter.
 
@@ -38,7 +38,7 @@ The download URLs can be extracted from the above OpenSearch query result. A uti
 The follwing bash script snippet demonstrates the process:
 ```
 #!/usr/bin/bash
-baseUrl=https://code-de.org/opensearch/request/?httpAccept=application/atom%2Bxml
+baseUrl=https://catalog.code-de.org/opensearch/request/?httpAccept=application/atom%2Bxml
 parentIdentifier=EOP:CODE-DE:S2_MSI_L1C
 startDate=2017-01-04T00:00:00.000Z
 endDate=2017-01-04T23:59:59.999
@@ -66,7 +66,7 @@ Another example to download a whole directory from the download server:
 
 _Download directories_
 ```
-wget -O- -nv https://dehub.dlr.de/Sentinel2/2016/06/14 2> /dev/null | grep 'a href=".*.zip' | cut -d'"' -f2 ; done | head -10 | xargs -n1 -P10 -I{} wget http://dehub.dlr.de/download/{}
+wget -O- -nv https://code-de.org/Sentinel2/2016/06/14 2> /dev/null | grep 'a href=".*.zip' | cut -d'"' -f2 ; done | head -10 | xargs -n1 -P10 -I{} wget http://code-de.org/download/{}
 ```
 This command can be enhanced to filter for specific Sentinel-2 tiles, based on the new compact file naming convention, 
 inserting another ```| grep _T32UPU_``` filter (example tile over munich).
