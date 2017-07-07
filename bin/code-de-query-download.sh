@@ -5,6 +5,8 @@
 #   Performs an OpenSearch query and downloads the found products
 #
 # Note:
+#   The use of the CODE-DE tools, online serivces and data is subject to the CODE-DE Terms & Conditions
+#      https://code-de.org/en/terms/CODE-DE_Terms.pdf
 #   Currently CODE-DE does not use authentication/authorization, so a login is not requried.
 #
 function usage {
