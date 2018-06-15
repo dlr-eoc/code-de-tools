@@ -104,11 +104,11 @@ if [ "$?" -ne 0 ] || [ "${response:0:1}" != "<" ] ; then
   logerr "query failed: $response"
   exit 1
 fi
+# the following xmllint, sed and awk combination ensures proper parsing and order of attributes in output
 files=$(echo $response \
-  | xmllint --format --nowrap - \
-  | egrep '"(identifier|ingestiondate|size|uuid)"' \
-  | cut -d'>' -f2 | cut -d'<' -f1 \
-  | xargs -n5 echo | tr ' ' ';'
+  | xmllint --xpath "//*[local-name()='entry']/*[local-name()='title' or @name='uuid' or @name='ingestiondate' or @name='size']" - \
+  | sed -e 's^</[a-zA-Z:]*>^\n^g' -e 's/<[a-zA-Z]*://g' -e 's/>/ /g' \
+  | awk 'function printentry() {print uuid";"name";"date";"size} /^title/ && (uuid!="") {printentry(); uuid=""} /^title/ {name=$2} /uuid/ {uuid=$3} /ingestiondate/ {date=$3} /size/ {size=$3$4} END {printentry()}'
 )
  
 count=$(echo $files | wc -w | tr -d ' ')
