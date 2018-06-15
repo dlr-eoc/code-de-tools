@@ -33,6 +33,8 @@ Output products are placed in the current directory.
 #### Change History
 2018-06-15 Enhanced with options --user, --curlOptions and --noTransfer
 
+Note: when using a .netrc file with ```--curlOptions```, make sure you include ```--cookie-jar``` and ```--location-trusted``` options.
+
 ### dataHubTransfer.sh 
 
 This script will search and incrementally download new products from a DHuS.
