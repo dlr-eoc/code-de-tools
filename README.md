@@ -16,16 +16,22 @@ The scripts are located in the `bin/` subdirectory. The script header contains i
 
 Performs an OpenSearch query and downloads the found products.
 ```
-  USAGE:
+USAGE:
 
-  ./code-de-query-download.sh -c|--condition=... [-b|--baseurl=https://catalog.code-de.org] [-l|--limit=50] [-p|--parallel=1]
-    --condition is the full OpenSearch query, for example:
-      -c 'parentIdentifier=EOP:CODE-DE:S2_MSI_L1C&startDate=2017-01-04T00:00:00.000Z&endDate=2017-01-04T23:59:59.999&bbox=5.9,47.2,15.2,55'
-    --baseurl of the CODE-DE services (default is https://catalog.code-de.org)
-    --limit the amount of products to be retrieved (default=50, max=500)
-    --parallel count of retrievals, WARNING: do not overload your system and network (the server might limit you to 2 or 4 parallel downloads)
+./code-de-query-download.sh -c|--condition=... [-b|--baseurl=https://catalog.code-de.org] [-o|--curlOpts=curl-options] [-l|--limit=50] [-p|--parallel=1] [-n|--noTransfer]
+  --condition is the full OpenSearch query, for example:
+    -c 'parentIdentifier=EOP:CODE-DE:S2_MSI_L1C&startDate=2018-06-04T00:00:00.000Z&endDate=2018-06-04T23:59:59.999&bbox=5.9,47.2,15.2,55'
+  --user in the form username:password (alternatively use --curlOpts='--netrc-file...myNetRc...file'
+  --baseurl of the CODE-DE services (default is https://catalog.code-de.org)
+  --curlOpts allos specifying special curl options like -o='--progress-bar --netrc-file=...myNetRc...file'
+  --limit the amount of products to be retrieved (default=50, max=500)
+  --parallel count of retrievals, WARNING: do not overload your system and network (the server might limit you to 2 or 4 parallel downloads)
+  --noTransfer to test the query
 ```
 Output products are placed in the current directory.
+
+#### Change History
+2018-06-15 Enhanced with options --user, --curlOptions and --noTransfer
 
 ### dataHubTransfer.sh 
 
