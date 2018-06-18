@@ -34,8 +34,12 @@ Output products are placed in the current directory.
 ```
 code-de-query-download.sh -c 'parentIdentifier=EOP:CODE-DE:S2_MSI_L1C&startDate=2018-06-04T00:00:00.000Z&endDate=2018-06-04T23:59:59.999&bbox=5.9,47.2,15.2,55' -o='--insecure --netrc-file /home/user/.netrc_code-de --location --cookie-jar /tmp/t' -l=2
 ```
-Note: when using a __.netrc__ file with ```--curlOptions```, make sure you include ```--cookie-jar``` and ```--location``` options. The .netrc file must contain the single-sign-on server ```machine sso.eoc.dlr.de``` and the ```login``` and ```password``` of your CODE-DE account.
-
+Note: when using a __.netrc__ file with ```--curlOptions```, make sure you include ```--cookie-jar``` and ```--location``` options. The .netrc file must contain the single-sign-on server, with your login and password of your CODE-DE account:
+```
+machine sso.eoc.dlr.de
+login xxxxxxx
+password yyyyyyy
+```
 
 #### Change History
 2018-06-15 Enhanced with options --user, --curlOptions and --noTransfer
