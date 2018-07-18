@@ -95,22 +95,22 @@ if [ -r $lastDateHolder ]; then
   log "Using $lastDateHolder"
   lastIngestionDate="$(cat $lastDateHolder)"
 fi
-condition="$basefilter&creationDate=[$lastIngestionDate&sortBy=creationDate&sortDir=ASC"
+condition="$basefilter&creationDate=[$lastIngestionDate"
 
 log "Searching for new files with $condition"
  
 # ------------------------------------------------------------------
 # query for new data
 export WGETRC
-response=$(/usr/bin/wget --auth-no-challenge --no-check-certificate -q -O - "$queryUrl?httpAccept=application/gml+xml&recordSchema=om&startRecord=1&maximumRecords=$batchSize&$condition" 2>&1 | cat) 
+response=$(/usr/bin/wget --auth-no-challenge --no-check-certificate -q -O - "$queryUrl?httpAccept=application/sru%2Bxml&recordSchema=om&startRecord=1&maximumRecords=$batchSize&$condition&sortBy=creationDate&sortDir=ASC" 2>&1 | cat) 
 if [ "$?" -ne 0 ] || [ "${response:0:1}" != "<" ] ; then
   logerr "query failed: $response"
   exit 1
 fi
 # the following xmllint, sed and awk combination ensures proper parsing and order of attributes in output
 files=$(echo $response \
-  | xmllint --xpath "//*[local-name()='timePosition' or local-name()='ProductInformation' or local-name()='Size']" - \
-  | tr '<' '\n' | egrep -v '^/' | egrep 'timePosition|href|size' | sed -e 's/uom=".*"//' | tr '=' '>' | tr -d '"' | cut -d'>' -f2 | paste -d';' - - -
+  | xmllint --xpath "//*[local-name()='timePosition' or local-name()='ProductInformation' or local-name()='Size' or local-name()='identifier']" - \
+  | tr '<' '\n' | egrep -v '^/' | egrep 'timePosition|href|size|identifier' | sed -e 's/uom=".*"//' | tr '=' '>' | tr -d '"' | cut -d'>' -f2 | paste -d';' - - - -
 )
  
 count=$(echo $files | wc -w | tr -d ' ')
@@ -129,26 +129,29 @@ do
   index=$((index+1))
  
   ingestionDate=$(echo $f | cut -d';' -f1)
-  file=$(echo $f | cut -d';' -f2)
+  downloadUrl=$(echo $f | cut -d';' -f2)
   size=$(echo $f | cut -d';' -f3)
+  id=$(echo $f | cut -d';' -f4)
+  id=${id##*:}
+  file="$outputPath/${id##*/}.SAFE.zip"
  
   # check if already retrieved
   if [[ -r "$file" && ( $size == $(stat -L --format='%s' "${file}") ) ]]; then
     log "[$index/$count] Skipping $f"
     keepLastFileDate $ingestionDate
     continue
-  elif [ -r $TRANSFERHISTORY ] && [ $(grep -c $safe $TRANSFERHISTORY) -gt 0 ]; then
-    log "[$index/$count] already transferred $safe"
+  elif [ -r $TRANSFERHISTORY ] && [ $(grep -c $id $TRANSFERHISTORY) -gt 0 ]; then
+    log "[$index/$count] already transferred $id"
     keepLastFileDate $ingestionDate
     continue
-  elif [ -r $DEFECTSHISTORY ] && [ $(grep -c $safe $DEFECTSHISTORY) -gt 2 ]; then
+  elif [ -r $DEFECTSHISTORY ] && [ $(grep -c $id $DEFECTSHISTORY) -gt 2 ]; then
     log WARNING "[$index/$count] Skipping previously defect $f"
     keepLastFileDate $ingestionDate
     continue
   else
     # retreive file
-    log "[$index/$count] Reading $uuid $safe $ingestionDate $size"
-    wget -q --auth-no-challenge --no-check-certificate -O "${file}_tmp" "$queryUrl/odata/v1/Products('${uuid}')/\$value"
+    log "[$index/$count] Reading $downloadUrl $ingestionDate $size"
+    wget -q --auth-no-challenge --no-check-certificate -O "${file}_tmp" "$downloadUrl"
   fi
 
   # check size
@@ -172,7 +175,7 @@ do
   # remember date of this file for next query
   keepLastFileDate $ingestionDate
  
-  echo "$file" >> $TRANSFERHISTORY
+  echo "$id" >> $TRANSFERHISTORY
  
   # --------------------------------------------------------------
   # execute transfer actions
