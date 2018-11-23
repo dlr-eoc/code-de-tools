@@ -28,7 +28,7 @@ SCRIPT_DIR=$(dirname $0)
 . $SCRIPT_DIR/includes/log-handler.sh
 
 # defaults
-queryUrl='https://catalog.code-de.org/opensearch/request/request'
+queryUrl='https://catalog.code-de.org/opensearch/request'
 
 # check working directory and load properties 
 WD=${1-}
