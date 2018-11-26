@@ -71,6 +71,11 @@ containing the properties:
 ```
 Note: properties above prefixed with `#` are optional.
 
+
+### code-de-transfer.sh 
+Similar to ```dataHubTransfer.sh```, but uses the CODE-DE native OpenSearch interface (better Performance and whole catalog of ONLINE and OFFLINE products). See script header for usage instructions.
+
+
 ## Installation
 
 Place the script package `bin/` contents somewhere on your PATH. The scripts require bash, 
